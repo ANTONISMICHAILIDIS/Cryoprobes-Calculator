@@ -1,5 +1,6 @@
 import streamlit as st
-import math
+import pandas as pd
+import numpy as np
 
 def calculate_probes(tumor_length, tumor_width, tumor_height, margin_required, probe_type):
     """
@@ -48,11 +49,12 @@ def main():
     # Display cryoprobe details
     st.subheader("Cryoprobe Information")
     st.write("Different cryoprobes create different iceball sizes. Choose the best option for optimal ablation coverage.")
-    st.table({
+    probe_df = pd.DataFrame({
         "Cryoprobe": ["Icerod", "Icesphere", "Iceforce"],
         "Iceball Size (cm)": ["2.5 × 4", "2 × 3", "3.5 × 5"],
         "Shape": ["Elliptical", "Spherical", "Hybrid"]
     })
+    st.table(probe_df)
     
     # Footer
     st.markdown("---")
