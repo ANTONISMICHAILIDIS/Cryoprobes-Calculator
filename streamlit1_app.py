@@ -1,73 +1,88 @@
 import streamlit as st
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-def suggest_probes(tumor_length, tumor_width, tumor_height, margin_required):
-    """
-    Automatically suggests the optimal cryoprobe combination based on tumor size and required ablation margin.
-    """
-    probe_data = [
-        {"name": "Icerod", "iceball": (2.5, 4), "shape": "Elliptical"},
-        {"name": "Icesphere", "iceball": (2, 3), "shape": "Spherical"},
-        {"name": "Iceforce", "iceball": (3.5, 5), "shape": "Hybrid"}
-    ]
-    
-    d_ablation = max(tumor_length, tumor_width, tumor_height) + 2 * margin_required
-    
-    # If lesion is very small, use a single Icesphere probe
-    if d_ablation <= 3:
-        return ["Icesphere (1 probe)"]
-    
-    # Prefer to use at least two probes if possible
-    for probe in probe_data:
-        iceball_max = probe["iceball"][1]
-        if iceball_max >= d_ablation:
-            return [f"{probe['name']} (1 probe)"] if d_ablation <= iceball_max else [f"{probe['name']} (2 probes)"]
-    
-    # If no single probe can fully cover the lesion, try combining probes
-    combinations = []
-    for probe in probe_data:
-        for secondary_probe in probe_data:
-            combined_max = probe["iceball"][1] + secondary_probe["iceball"][1] - 1  # 1cm overlap
-            if combined_max >= d_ablation:
-                return [f"{probe['name']} + {secondary_probe['name']} (2 probes)"]
-    
-    # Default to using two Icesphere probes with minimum spacing of 1 cm
-    return ["Icesphere (2 probes, 1cm spacing)"]
+# Title and Description
+st.title("Renal Cryoablation Treatment Planning")
+st.markdown("""
+This application provides treatment recommendations for renal cryoablation based on patient and tumor characteristics.
+Please input the relevant parameters below.
+""")
 
-def main():
-    st.set_page_config(page_title="Cryoablation Probe Calculator", layout="centered")
-    
-    st.title("Cryoablation Probe Calculator")
-    st.markdown("Automatically suggests the optimal cryoprobes required for renal tumor ablation based on tumor dimensions.")
-    
-    # Sidebar for user input
-    st.sidebar.header("Tumor Input Parameters")
-    tumor_length = st.sidebar.number_input("Tumor Length (cm)", min_value=1.0, step=0.1)
-    tumor_width = st.sidebar.number_input("Tumor Width (cm)", min_value=1.0, step=0.1)
-    tumor_height = st.sidebar.number_input("Tumor Height (cm)", min_value=1.0, step=0.1)
-    
-    # Define margin based on tumor size
-    margin_required = 1.0 if max(tumor_length, tumor_width, tumor_height) > 4 else 0.5
-    st.sidebar.write(f"**Required Ablation Margin:** {margin_required} cm")
-    
-    if st.sidebar.button("Calculate Probes"):
-        suggested_probes = suggest_probes(tumor_length, tumor_width, tumor_height, margin_required)
-        st.success(f"Recommended Probes: {', '.join(suggested_probes)}")
-    
-    # Display cryoprobe details
-    st.subheader("Cryoprobe Information")
-    st.write("Different cryoprobes create different iceball sizes. The algorithm selects the best combination for optimal ablation coverage.")
-    probe_df = pd.DataFrame({
-        "Cryoprobe": ["Icerod", "Icesphere", "Iceforce"],
-        "Iceball Size (cm)": ["2.5 × 4", "2 × 3", "3.5 × 5"],
-        "Shape": ["Elliptical", "Spherical", "Hybrid"]
-    })
-    st.table(probe_df)
-    
-    # Footer
-    st.markdown("---")
-    st.markdown("Developed for efficient renal cryoablation planning.")
+# Input Widgets
+st.sidebar.header("Patient and Tumor Characteristics")
+age = st.sidebar.number_input("Patient Age", min_value=18, max_value=100, value=65)
+sex = st.sidebar.selectbox("Sex", ["Male", "Female"])
+num_lesions = st.sidebar.number_input("Number of Lesions", min_value=1, max_value=5, value=1)
+tumor_length = st.sidebar.number_input("Tumor Length (cm)", min_value=0.5, max_value=10.0, value=3.0)
+tumor_width = st.sidebar.number_input("Tumor Width (cm)", min_value=0.5, max_value=10.0, value=2.5)
+tumor_height = st.sidebar.number_input("Tumor Height (cm)", min_value=0.5, max_value=10.0, value=2.5)
+renal_score = st.sidebar.number_input("Renal Complexity Score (PADUA/RENAL)", min_value=4, max_value=12, value=6)
+histological_type = st.sidebar.selectbox("Histological Type", ["Clear Cell", "Papillary", "Chromophobe"])
+isup_grade = st.sidebar.selectbox("ISUP Grade", ["1", "2", "3", "4"])
 
-if __name__ == "__main__":
-    main()
+# Processing Logic (Simplified Decision Rules)
+# For demonstration purposes, we use simple thresholds derived from our retrospective analysis.
+
+def treatment_plan(length, width, height, score, grade):
+    avg_size = np.mean([length, width, height])
+    # Determine probe number based on average size and renal complexity
+    if avg_size < 2.5 and score <= 6 and grade == "1":
+        probes = 2
+    elif avg_size < 3.5 and score <= 8:
+        probes = 3
+    else:
+        probes = 4
+
+    # Recommend hydrodissection if the ablation margin (simulated as a function of score) is below threshold.
+    # Here, we assume a lower renal score suggests a safer zone, higher score might indicate proximity to critical structures.
+    if score >= 8 or avg_size > 3.0:
+        hydro = "Yes"
+        hydro_num = 1 if score < 10 else 2
+        hydro_target = "Colon/Perirenal fat" if score < 10 else "Colon/Adjacent structures"
+    else:
+        hydro = "No"
+        hydro_num = 0
+        hydro_target = "N/A"
+
+    return probes, hydro, hydro_num, hydro_target
+
+# Generate treatment plan based on inputs
+probes, hydro, hydro_num, hydro_target = treatment_plan(tumor_length, tumor_width, tumor_height, renal_score, isup_grade)
+
+st.header("Recommended Treatment Plan")
+st.write(f"**Number of Cryoprobes:** {probes}")
+st.write(f"**Hydrodissection Recommended:** {hydro}")
+if hydro == "Yes":
+    st.write(f"**Number of Hydrodissection Sites:** {hydro_num}")
+    st.write(f"**Target Structures for Hydrodissection:** {hydro_target}")
+
+# Predictive outcomes based on retrospective data
+def predict_outcomes(probes, score):
+    # For demonstration, recurrence risk increases slightly with higher probe number and complexity score
+    recurrence_1m = 5 + (score - 6) * 1.5  # baseline 5% at 1 month plus increment
+    recurrence_3m = 8 + (score - 6) * 2.0  # baseline 8% at 3 months
+    complications = 4 + (probes - 2) * 1.5  # baseline 4% with 2 probes
+
+    # Bound percentages between 0 and 100%
+    recurrence_1m = min(max(recurrence_1m, 0), 100)
+    recurrence_3m = min(max(recurrence_3m, 0), 100)
+    complications = min(max(complications, 0), 100)
+    return recurrence_1m, recurrence_3m, complications
+
+rec_1m, rec_3m, comp_rate = predict_outcomes(probes, renal_score)
+
+st.header("Predicted Outcomes")
+st.write(f"**Estimated Recurrence/Residual Tumor at 1 Month:** {rec_1m:.1f}%")
+st.write(f"**Estimated Recurrence/Residual Tumor at 3 Months:** {rec_3m:.1f}%")
+st.write(f"**Estimated Complication Rate:** {comp_rate:.1f}%")
+
+# Reference Percentages from Literature
+st.markdown("---")
+st.subheader("Reference Data")
+st.markdown("""
+- **Recurrence/Residual Tumor Rates:**  
+  - Literature reports recurrence rates of approximately 5–10% at 1 month and 10–15% at 3 months.
+- **Complication Rates:**  
+  - Reported complication rates in cryoablation range from 4% to 7%.
+""")
