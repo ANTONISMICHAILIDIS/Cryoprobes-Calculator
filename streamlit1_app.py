@@ -193,7 +193,9 @@ kidney_main_data = [
     {"number": 52, "size_mass": "2,8 x 2,7 x 2", "RENAL_score": "5p", "histology": "Clear Cell"},
     {"number": 53, "size_mass": "2 x 1 x 2", "RENAL_score": "5p", "histology": "Clear Cell"}
 ]
+# Create the DataFrame for kidney main data
 df_main_kidney = pd.DataFrame(kidney_main_data)
+df_main_kidney.set_index("number", inplace=True)
 
 # Kidney cryoablation results table (only rows 1-53)
 cryo_data_kidney = [
@@ -256,8 +258,7 @@ df_cryo_kidney = pd.DataFrame(cryo_data_kidney)
 # Only use rows 1-53 (drop the extra row 54)
 df_cryo_kidney = df_cryo_kidney[df_cryo_kidney["number"] <= 53]
 
-df_main_kidney = pd.DataFrame(kidney_main_data)
-df_main_kidney.set_index("number", inplace=True)
+f_cryo_kidney = pd.DataFrame(cryo_data_kidney)
 df_cryo_kidney.set_index("number", inplace=True)
 df_kidney_merged = pd.merge(df_main_kidney, df_cryo_kidney, left_index=True, right_index=True)
 
