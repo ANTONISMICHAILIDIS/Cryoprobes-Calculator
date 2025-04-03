@@ -2,70 +2,69 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 
-# ------------------------------------
+# -------------------------
 # A) Define the Main Table (df_main)
-# (Note: "Location / Distance from Hilum" has been removed from user inputs.)
-# ------------------------------------
+# -------------------------
 main_data = [
-    {"size_mass": "1,9 x 2,1 x 2,8", "RENAL_score": "7P", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1 x 1,7 x 1,3", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,1 x 2,5 x 2,8", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2 x 2,8 x 2,8", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1,6 x 1,2 x 1,8", "RENAL_score": "7p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,9 x 2,6 x 2,8", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,9 x 2,6 x 3 (1,9 x 2,2 x 3)", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,5 x 3,4 x 3,9", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,1 x 1,9 x 1,9", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,3 x 2 x 2,1", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,9 x 3,3 x 3,1", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,6 x 3,5 x 3,7", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,6 x 3,8 x 2,8", "RENAL_score": "7ph", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,2 x 3,4 x 3,1", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3 x 2,8 x 2,7", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,8 x 2,4 x 2", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1,7 x 1,6 x 1,8", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,6 x 2,5 x 2,6", "RENAL_score": "7xh", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "5,8 x 4,3 x 6,2", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,9 x 3,2 x 2,6", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1,4 x 1,4 x 1,5", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,6 x 2,3 x 2,1", "RENAL_score": "7ph", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2 x 1,8 x 1,9", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,2 x 2,9 x 3,2", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,1 x 2,9 x 2,8", "RENAL_score": "6a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1,9 x 1,6 x 1,6", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2 x 2,5 x 2,3", "RENAL_score": "7p", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,4 x 2,6 x 2", "RENAL_score": "6a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "3,6 x 3,7 x 4,3", "RENAL_score": "10a", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "1,8 x 2 x 2,1", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 1"},
-    {"size_mass": "2,2 x 2,5 x 2,4", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 2"},
-    {"size_mass": "2,5 x 2,1 x 2,2", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 5"},
-    {"size_mass": "19 x 19 x 2,1", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 6"},
-    {"size_mass": "2,6 x 2,5 x 2,1", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL GR 7"},
-    {"size_mass": "4,6 x 3,8 x 4,8", "RENAL_score": "8x", "BIOPSY": "CLEAR CELL GR 8"},
-    {"size_mass": "2,6 x 1,9 x 2,2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 11"},
-    {"size_mass": "4,2 x 3,6 x 4,6", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 12"},
-    {"size_mass": "3,1 x 2,5 x 4,8", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 14"},
-    {"size_mass": "3,1 x 3,9 x 3,4", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL GR 15"},
-    {"size_mass": "2,5 x 2,7 x 2,8", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL GR 16"},
-    {"size_mass": "3,4 x 3,5 x 2,9", "RENAL_score": "6p", "BIOPSY": "CLEAR CELL GR 17"},
-    {"size_mass": "3,7 x 3,5 x 3,4", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 18"},
-    {"size_mass": "1,7 x 1,9 x 2", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL GR 20"},
-    {"size_mass": "3,7 x 3,5 x 4", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL GR 21"},
-    {"size_mass": "2,4 x 2,0 x 2,6", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL GR 22"},
-    {"size_mass": "2,6 x 2,3 x 2,1", "RENAL_score": "7ah", "BIOPSY": "CLEAR CELL GR 23"},
-    {"size_mass": "2,9 x 2,7 x 2,7", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 24"},
-    {"size_mass": "3,2 x 2,5 x 3,7", "RENAL_score": "4ah", "BIOPSY": "CLEAR CELL GR 25"},
-    {"size_mass": "2,9 x 2,8 x 2,9", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 26"},
-    {"size_mass": "3,7 x 3,2 x 3,5", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL GR 27"},
-    {"size_mass": "2 x 2,2 x 1,9", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL GR 28"},
-    {"size_mass": "2,8 x 2,7 x 2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 30"},
-    {"size_mass": "2 x 1 x 2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL GR 31"}
+    {"size_mass": "1,9 x 2,1 x 2,8", "RENAL_score": "7P", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1 x 1,7 x 1,3", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,1 x 2,5 x 2,8", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2 x 2,8 x 2,8", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,6 x 1,2 x 1,8", "RENAL_score": "7p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 2,6 x 2,8", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 2,6 x 3 (1,9 x 2,2 x 3)", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,5 x 3,4 x 3,9", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,1 x 1,9 x 1,9", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,3 x 2 x 2,1", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 3,3 x 3,1", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,6 x 3,5 x 3,7", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,6 x 3,8 x 2,8", "RENAL_score": "7ph", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,2 x 3,4 x 3,1", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3 x 2,8 x 2,7", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,8 x 2,4 x 2", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,7 x 1,6 x 1,8", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,6 x 2,5 x 2,6", "RENAL_score": "7xh", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "5,8 x 4,3 x 6,2", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 3,2 x 2,6", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,4 x 1,4 x 1,5", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,6 x 2,3 x 2,1", "RENAL_score": "7ph", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2 x 1,8 x 1,9", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,2 x 2,9 x 3,2", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,1 x 2,9 x 2,8", "RENAL_score": "6a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,9 x 1,6 x 1,6", "RENAL_score": "6x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2 x 2,5 x 2,3", "RENAL_score": "7p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,4 x 2,6 x 2", "RENAL_score": "6a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,6 x 3,7 x 4,3", "RENAL_score": "10a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,8 x 2 x 2,1", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,2 x 2,5 x 2,4", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,5 x 2,1 x 2,2", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "19 x 19 x 2,1", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,6 x 2,5 x 2,1", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "4,6 x 3,8 x 4,8", "RENAL_score": "8x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,6 x 1,9 x 2,2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "4,2 x 3,6 x 4,6", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,1 x 2,5 x 4,8", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,1 x 3,9 x 3,4", "RENAL_score": "4x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,5 x 2,7 x 2,8", "RENAL_score": "5x", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,4 x 3,5 x 2,9", "RENAL_score": "6p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,7 x 3,5 x 3,4", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "1,7 x 1,9 x 2", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,7 x 3,5 x 4", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,4 x 2,0 x 2,6", "RENAL_score": "4p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,6 x 2,3 x 2,1", "RENAL_score": "7ah", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 2,7 x 2,7", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,2 x 2,5 x 3,7", "RENAL_score": "4ah", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,9 x 2,8 x 2,9", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "3,7 x 3,2 x 3,5", "RENAL_score": "5a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2 x 2,2 x 1,9", "RENAL_score": "4a", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2,8 x 2,7 x 2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"},
+    {"size_mass": "2 x 1 x 2", "RENAL_score": "5p", "BIOPSY": "CLEAR CELL"}
 ]
 df_main = pd.DataFrame(main_data)
 
-# ------------------------------------
+# -------------------------
 # B) Define the Cryoablation Results Table (df_cryo)
-# ------------------------------------
+# -------------------------
 cryo_data = [
     {"cryoprobes": "3 rod", "types_of_probes": "ROD", "size_Ice_ball": "2,7x1,9x3,2", "protection": "NO", "complications": "NONE"},
     {"cryoprobes": "1", "types_of_probes": "", "size_Ice_ball": "1,4 x 2,6 x 2,8 or 1,7", "protection": "YES/COLON SPLEEN", "complications": "NONE"},
@@ -154,7 +153,7 @@ Enter your tumor parameters in the sidebar.
 """)
 
 # ---------------------------
-# Sidebar: User Input Section (without Location)
+# Sidebar: User Input Section
 # ---------------------------
 st.sidebar.header("Enter Tumor Parameters")
 
@@ -169,30 +168,27 @@ inp_renal_numeric = st.sidebar.number_input("RENAL Score (numeric)", min_value=1
 inp_renal_suffix = st.sidebar.selectbox("RENAL Score Suffix", options=["a", "p", "x"], index=1)
 inp_renal_score = f"{inp_renal_numeric}{inp_renal_suffix}"
 
-# Histology Type & Grade (Biopsy Type)
+# Histology Type (Biopsy Type) - Cancer grade is removed.
 histology_options = ["CLEAR CELL", "PAPILLARY", "CHROMOPHOBE"]
 inp_histology = st.sidebar.selectbox("Histology Type", options=histology_options, index=0)
-grade_options = ["GR 1", "GR 2", "GR 3", "GR 4", "GR 5", "GR 6", "GR 7", "GR 8", "GR 9", "GR 10", "GR 11", "GR 12", "GR 13", "GR 14", "GR 15", "GR 16", "GR 17", "GR 18", "GR 20", "GR 21", "GR 22", "GR 23", "GR 24", "GR 25", "GR 26", "GR 27", "GR 28", "GR 30", "GR 31"]
-inp_grade = st.sidebar.selectbox("Cancer Grade", options=grade_options, index=11)  # Default "GR 12"
-inp_biopsy = f"{inp_histology} {inp_grade}"
 
 # Display user input for confirmation
 st.sidebar.markdown("### Your Input:")
 st.sidebar.write(f"**Tumor Size (Mass):** {inp_size_mass} cm")
 st.sidebar.write(f"**RENAL Score:** {inp_renal_score}")
-st.sidebar.write(f"**Biopsy Type:** {inp_biopsy}")
+st.sidebar.write(f"**Histology Type:** {inp_histology}")
 
 # ------------------------------------
-# Matching Algorithm: Find the closest reference row (based on tumor dimensions and RENAL score, filtered by biopsy type)
+# Matching Algorithm: Find the closest reference row (based on tumor dimensions and RENAL score, filtered by histology type)
 # ------------------------------------
 if st.sidebar.button("Generate Cryoablation Plan"):
-    # Filter the merged dataframe by biopsy type (case-insensitive)
+    # Filter the merged dataframe by histology type (case-insensitive substring match)
     df_filtered = df_merged[
-        df_merged["BIOPSY"].str.strip().str.lower() == inp_biopsy.strip().lower()
+        df_merged["BIOPSY"].str.strip().str.lower().str.contains(inp_histology.strip().lower())
     ]
     
     if df_filtered.empty:
-        st.error("No matching data found for the given Biopsy Type. Please check your inputs.")
+        st.error("No matching data found for the given Histology Type. Please check your inputs.")
     else:
         # Helper: extract numeric value from RENAL score (e.g., "5p" -> 5)
         def extract_numeric_from_score(s):
@@ -235,10 +231,10 @@ if st.sidebar.button("Generate Cryoablation Plan"):
         else:
             match = df_filtered.loc[best_idx]
             st.header("Recommended Cryoablation Plan")
-            st.subheader("Input Parameters")
+            st.subheader("Matched Reference Parameters")
             st.write(f"**Tumor Size (Mass):** {match['size_mass']} cm")
             st.write(f"**RENAL Score:** {match['RENAL_score']}")
-            st.write(f"**Biopsy Type:** {match['BIOPSY']}")
+            st.write(f"**Histology Type:** {match['BIOPSY']}")
             st.markdown("---")
             st.subheader("Cryoablation Parameters")
             st.write(f"**Cryoprobes:** {match['cryoprobes']}")
