@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, jsonify
-import json
 import math
 import re
+import json  # Standard library module, do not add to requirements
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -254,13 +256,12 @@ df_cryo_kidney = pd.DataFrame(cryo_data_kidney)
 # Only use rows 1-53 (drop the extra row 54)
 df_cryo_kidney = df_cryo_kidney[df_cryo_kidney["number"] <= 53]
 
+df_main_kidney = pd.DataFrame(kidney_main_data)
 df_main_kidney.set_index("number", inplace=True)
 df_cryo_kidney.set_index("number", inplace=True)
 df_kidney_merged = pd.merge(df_main_kidney, df_cryo_kidney, left_index=True, right_index=True)
 
-#####################################
-# 2) Reference Data for Lung
-#####################################
+# Reference Data for Lung
 lung_main_data = [
     {"index_l": 1, "type_lesion": "NSCLC", "age": 82, "side": "R", "size_lung": "1,3x2,1x2,3"},
     {"index_l": 2, "type_lesion": "NSCLC", "age": 87, "side": "R", "size_lung": "1,5x1,4x2,1"},
@@ -1040,31 +1041,30 @@ def calculate_probe_count(tumor_volume):
 
 @app.route('/')
 def index():
-    # For simplicity, we return a message; in practice, you would render an index.html template.
-    return "Cryoablation Probe Calculator API - Use the /calculate endpoint to POST data."
+    return render_template('index.html')  # You can create an index.html template for a UI
 
 @app.route('/calculate', methods=['POST'])
 def calculate():
     data = request.json
     
-    # Extract patient and tumor info from request
-    patient_age = data.get('age')
-    patient_gender = data.get('gender')
-    prior_surgery = data.get('priorSurgery')
-    
+    # Extract common data
     organ = data.get('organ')  # "Kidney" or "Lung"
     
     if organ.lower() == "kidney":
-        tumor_size = data.get('tumorSize')  # Expecting a dict: {"length": 4.2, "width": 3.6, "height": 4.6}
-        tumor_volume = (tumor_size.get('length', 0) * tumor_size.get('width', 0) * tumor_size.get('height', 0) * math.pi) / 6  # Ellipsoid volume approximation
+        # Kidney data extraction
+        tumor_size = data.get('tumorSize')  # Expected dict with keys: length, width, height
+        length = float(tumor_size.get('length', 0))
+        width = float(tumor_size.get('width', 0))
+        height = float(tumor_size.get('height', 0))
+        tumor_volume = (length * width * height * math.pi) / 6  # Ellipsoid approximation
         
-        tumor_dims = [tumor_size.get('length', 0), tumor_size.get('width', 0), tumor_size.get('height', 0)]
+        tumor_dims = [length, width, height]
         user_renal_score = data.get('renalScore', "0")
         user_renal_numeric = parse_renal_score(user_renal_score)
         user_histology = data.get('histology', "Clear Cell")
+        tumor_shape = data.get('tumorShape', "round")
         
-        # Determine required margin based on tumor characteristics
-        # For simplicity, we use fixed margins: benign: 0.3, low diff or large volume: 1.0, else 0.5
+        # For kidney, use fixed margin calculation (adjust as needed)
         tumor_type = data.get('tumorType', "malignant")
         if tumor_type.lower() == 'benign':
             required_margin = 0.3
@@ -1074,19 +1074,24 @@ def calculate():
             required_margin = 0.5
         
         required_ablation = {
-            'x': tumor_size.get('length', 0) + (required_margin * 2),
-            'y': tumor_size.get('width', 0) + (required_margin * 2),
-            'z': tumor_size.get('height', 0) + (required_margin * 2)
+            'x': length + (required_margin * 2),
+            'y': width + (required_margin * 2),
+            'z': height + (required_margin * 2)
         }
         
         probe_count = calculate_probe_count(tumor_volume)
         
-        # Determine probe configuration based on tumor shape (assuming "round" for kidney)
-        configuration = "Triangular configuration" if probe_count == 3 else "Parallel configuration" if probe_count == 2 else "Single probe" if probe_count == 1 else "Square configuration"
+        # For kidney, assume configuration based on number (simplified)
+        if probe_count == 1:
+            configuration = "Single probe"
+        elif probe_count == 2:
+            configuration = "Parallel configuration"
+        elif probe_count == 3:
+            configuration = "Triangular configuration"
+        else:
+            configuration = "Square configuration"
         
-        # Recommended probe selection for Boston Scientific cryoablation based on tumor shape
-        recommended_probe = "IceSphere"  # default
-        tumor_shape = data.get('tumorShape', "round")
+        # Choose recommended probe type based on tumor shape
         if tumor_shape.lower() == "round":
             recommended_probe = "IceSphere"
         elif tumor_shape.lower() == "oblong":
@@ -1094,24 +1099,12 @@ def calculate():
         else:
             recommended_probe = "IceForce"
         
-        # Get organ-specific protocol for kidney and cryoablation
         protocol = organ_protocols.get("kidney", {}).get("cryoablation", {})
-        
-        # Calculate iceball size from reference data for kidney
         iceball_size = iceball_data.get("kidney", {}).get(recommended_probe, {})
         
-        # Determine if hydrodissection is needed (for kidney, we assume yes)
-        hydrodissection_needed = True
-        
-        # Prepare result dictionary
         result = {
-            'patientInfo': {
-                'age': patient_age,
-                'gender': patient_gender,
-                'priorSurgery': prior_surgery
-            },
+            'organ': organ,
             'tumorInfo': {
-                'organ': organ,
                 'tumorSize': tumor_size,
                 'volume': round(tumor_volume, 2),
                 'requiredMargin': required_margin,
@@ -1120,33 +1113,32 @@ def calculate():
                 'histology': user_histology,
                 'tumorShape': tumor_shape
             },
-            'ablationInfo': {
-                'ablationType': data.get('ablationType', 'cryoablation'),
-                'company': data.get('company', 'Boston Scientific')
-            },
             'recommendation': {
                 'probeCount': probe_count,
                 'configuration': configuration,
                 'recommendedProbe': recommended_probe,
                 'protocol': protocol,
                 'iceballSize': iceball_size,
-                'hydrodissectionNeeded': hydrodissection_needed
+                'hydrodissectionNeeded': True  # For kidney, assume yes
             }
         }
         return jsonify(result)
     
     elif organ.lower() == "lung":
-        # For lung, extract lung-specific data
-        tumor_size = data.get('tumorSize')  # Expecting {"length": ..., "width": ..., "height": ...}
-        tumor_volume = (tumor_size.get('length', 0) * tumor_size.get('width', 0) * tumor_size.get('height', 0) * math.pi) / 6
+        # Lung data extraction
+        tumor_size = data.get('tumorSize')  # Expected dict: length, width, height
+        length = float(tumor_size.get('length', 0))
+        width = float(tumor_size.get('width', 0))
+        height = float(tumor_size.get('height', 0))
+        tumor_volume = (length * width * height * math.pi) / 6
+        tumor_dims = [length, width, height]
         
-        tumor_dims = [tumor_size.get('length', 0), tumor_size.get('width', 0), tumor_size.get('height', 0)]
         user_type_lesion = data.get('typeLesion', "NSCLC")
         user_side = data.get('side', "R")
         
         diff_total = float("inf")
         best_idx = None
-        # Matching using lung reference data
+        # Iterate over lung reference data
         for idx, row in df_lung_merged.iterrows():
             ref_dims = parse_size(row["size_lung"])
             if not ref_dims:
@@ -1158,8 +1150,10 @@ def calculate():
             if total_diff < diff_total:
                 diff_total = total_diff
                 best_idx = idx
+        
         if best_idx is None:
             return jsonify({"error": "No matching lung reference data found."}), 404
+        
         match = df_lung_merged.loc[best_idx]
         result = {
             'lungInfo': {
@@ -1197,5 +1191,5 @@ def get_probes(company):
 # 5) Run the App
 #####################################
 if __name__ == '__main__':
-    # Use use_reloader=False to avoid the "signal" error in non-main threads.
+    # Disable reloader to avoid "signal" errors in non-main threads.
     app.run(debug=True, use_reloader=False, host='0.0.0.0', port=5000)
