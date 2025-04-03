@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 
 # -------------------------
 # A) Define the Main Table (df_main)
@@ -332,462 +331,117 @@ df_main = pd.DataFrame(main_data)
 # B) Define the Cryoablation Results Table (df_cryo)
 # -------------------------
 cryo_data = [
-    {
-        "cryoprobes": "3 rod",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "2,7x1,9x3,2",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "1",
-        "types_of_probes": "",
-        "size_Ice_ball": "1,4 x 2,6 x 2,8 or 1,7",
-        "protection": "YES/COLON SPLEEN",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "2,8 x 2,7 x 3,5",
-        "protection": "NONE",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3 x 3,6 x 2",
-        "protection": "NONE",
-        "complications": "PNEUMOTH"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "2,7 x 2,4 x 2,8",
-        "protection": "NONE",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "",
-        "size_Ice_ball": "2,9 x 3 x 4,2",
-        "protection": "YES/SPLEEN",
-        "complications": ""
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3 x 3,8 x 3,4",
-        "protection": "NO",
-        "complications": "MILD HEMORRHAGE?"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,8 x 5,2 x 4,9",
-        "protection": "YES/PSOAS",
-        "complications": "none"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,2 x 3,4 x 3",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,7 x 2,4 x 3,2",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "4,2 x 3,6 x 4,1",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,8 x 4,2 x 4,9",
-        "protection": "YES/COLON",
-        "complications": "MILD HEMORRHAGE?"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,5 x 3,6 x 3,3",
-        "protection": "YES/ COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,5 x 3,2 x 3,6",
-        "protection": "YES/ COLON",
-        "complications": "MILD HEMORRHAGE?"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "2ROD+1SPHERE",
-        "size_Ice_ball": "3,6 x 2,9 x 3,4",
-        "protection": "NO",
-        "complications": "NONE?"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "2,7 x 3,7 x 3,5",
-        "protection": "YES/COLON",
-        "complications": ""
-    },
-    {
-        "cryoprobes": "1",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "1,2 x 1,8 x 2",
-        "protection": "YES/PSOAS",
-        "complications": ""
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "4SPHERE",
-        "size_Ice_ball": "3,5 x 3,3 x 3,8",
-        "protection": "COLON/SPLEEN",
-        "complications": "none"
-    },
-    {
-        "cryoprobes": "5",
-        "types_of_probes": "4FORCE+1ROD",
-        "size_Ice_ball": "5,5 x 5,7 x 6,5",
-        "protection": "YES/COLON/SPLEEN",
-        "complications": "none"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,5 x 4,8 x 4",
-        "protection": "HYDRO/COLON",
-        "complications": "none"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,1 x 2,9 x 2,7",
-        "protection": "NO",
-        "complications": "MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "2ROD+1SPHERE",
-        "size_Ice_ball": "2,6 x 4,4 x 3,5",
-        "protection": "YES/LIVER/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,1 x 2,5 x 3",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,5 x 4,7 x 5",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,2 x 4 x 4",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3 x 2,5 x 2,8",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,4 x 3,3 x 3",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "4 x 2,4 x 3,9",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "5,2 x 4 x 4,8",
-        "protection": "YES/SPLEEN",
-        "complications": "MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,7 x 3,3 x 2,8",
-        "protection": "NO",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,9 x 3,3 x 2,9",
-        "protection": "YES/PSOAS,RENAL VEIN",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,7 x 3,4 x 2,7",
-        "protection": "YES/SPLEEN",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3 x 3,6 x 3,8",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,1 x 2,7 x 2,4",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "FORCE",
-        "size_Ice_ball": "5,2 x 4,1 x 4,9",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,6 x 2,2 x 2,1",
-        "protection": "YES/PSOAS",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "FORCE",
-        "size_Ice_ball": "5,2 x 4,2 x 4,8",
-        "protection": "YES/PSOAS",
-        "complications": "HEMORRHAGE- νοσηλεία"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "FORCE",
-        "size_Ice_ball": "",
-        "protection": "",
-        "complications": ""
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "FORCE",
-        "size_Ice_ball": "5,0 x 3,5 x 5,3",
-        "protection": "YES/COLON, PSOAS",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "FORCE",
-        "size_Ice_ball": "3,5 x 4,1 x 4,3",
-        "protection": "YES/ COLON",
-        "complications": "MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3 x 4,1 x 2,9",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "5,5 x 5,5 x 4,6",
-        "protection": "NO",
-        "complications": "MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "4,2 x 3,9 x 5,4",
-        "protection": "YES/ COLON, PSOAS",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,4 x 2,6 x 3,1",
-        "protection": "YES/COLON",
-        "complications": "HEMORRHAGE ΜΕΓΑΛΗ"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,8 x 5,3 x 6,5",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "3,2 x 3,7 x 3,6",
-        "protection": "YES/PSOAS",
-        "complications": "MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,8 x 2,8 x 2,9",
-        "protection": "YES/COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "4,6 x 3,6 x 3,6",
-        "protection": "YES/LIVER,COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "4,2 x 3,1 x 3,6",
-        "protection": "YES/LIVER,COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "3,6 x 3 x 3,5",
-        "protection": "YES/SPLEEN,COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "4",
-        "types_of_probes": "ROD",
-        "size_Ice_ball": "4,1 x 4 x 5,2",
-        "protection": "YES/COLON",
-        "complications": "SUBCUTANEUS HEMATOMA / MILD HEMORRHAGE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,7 x 2,9 x 2,6",
-        "protection": "YES/ COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "3",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "4,7 x 3,6 x 3,5",
-        "protection": "YES/ COLON",
-        "complications": "NONE"
-    },
-    {
-        "cryoprobes": "2",
-        "types_of_probes": "SPHERE",
-        "size_Ice_ball": "2,3 x 33 x 2,5",
-        "protection": "YES/ PSOAS",
-        "complications": "NONE"
-    }
+    {"cryoprobes": "3 rod", "types_of_probes": "ROD", "size_Ice_ball": "2,7x1,9x3,2", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "1", "types_of_probes": "", "size_Ice_ball": "1,4 x 2,6 x 2,8 or 1,7", "protection": "YES/COLON SPLEEN", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "2,8 x 2,7 x 3,5", "protection": "NONE", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "3 x 3,6 x 2", "protection": "NONE", "complications": "PNEUMOTH"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "2,7 x 2,4 x 2,8", "protection": "NONE", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "", "size_Ice_ball": "2,9 x 3 x 4,2", "protection": "YES/SPLEEN", "complications": ""},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3 x 3,8 x 3,4", "protection": "NO", "complications": "MILD HEMORRHAGE?"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "3,8 x 5,2 x 4,9", "protection": "YES/PSOAS", "complications": "none"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,2 x 3,4 x 3", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "2,7 x 2,4 x 3,2", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "4,2 x 3,6 x 4,1", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "3,8 x 4,2 x 4,9", "protection": "YES/COLON", "complications": "MILD HEMORRHAGE?"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "3,5 x 3,6 x 3,3", "protection": "YES/ COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "3,5 x 3,2 x 3,6", "protection": "YES/ COLON", "complications": "MILD HEMORRHAGE?"},
+    {"cryoprobes": "3", "types_of_probes": "2ROD+1SPHERE", "size_Ice_ball": "3,6 x 2,9 x 3,4", "protection": "NO", "complications": "NONE?"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "2,7 x 3,7 x 3,5", "protection": "YES/COLON", "complications": ""},
+    {"cryoprobes": "1", "types_of_probes": "SPHERE", "size_Ice_ball": "1,2 x 1,8 x 2", "protection": "YES/PSOAS", "complications": ""},
+    {"cryoprobes": "3", "types_of_probes": "4SPHERE", "size_Ice_ball": "3,5 x 3,3 x 3,8", "protection": "COLON/SPLEEN", "complications": "none"},
+    {"cryoprobes": "5", "types_of_probes": "4FORCE+1ROD", "size_Ice_ball": "5,5 x 5,7 x 6,5", "protection": "YES/COLON/SPLEEN", "complications": "none"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "3,5 x 4,8 x 4", "protection": "HYDRO/COLON", "complications": "none"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,1 x 2,9 x 2,7", "protection": "NO", "complications": "MILD HEMORRHAGE"},
+    {"cryoprobes": "3", "types_of_probes": "2ROD+1SPHERE", "size_Ice_ball": "2,6 x 4,4 x 3,5", "protection": "YES/LIVER/COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,1 x 2,5 x 3", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "3,5 x 4,7 x 5", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "3,2 x 4 x 4", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3 x 2,5 x 2,8", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "2,4 x 3,3 x 3", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "4 x 2,4 x 3,9", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "5,2 x 4 x 4,8", "protection": "YES/SPLEEN", "complications": "MILD HEMORRHAGE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,7 x 3,3 x 2,8", "protection": "NO", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "SPHERE", "size_Ice_ball": "2,9 x 3,3 x 2,9", "protection": "YES/PSOAS,RENAL VEIN", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "2,7 x 3,4 x 2,7", "protection": "YES/SPLEEN", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3 x 3,6 x 3,8", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,1 x 2,7 x 2,4", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "FORCE", "size_Ice_ball": "5,2 x 4,1 x 4,9", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "SPHERE", "size_Ice_ball": "2,6 x 2,2 x 2,1", "protection": "YES/PSOAS", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "FORCE", "size_Ice_ball": "5,2 x 4,2 x 4,8", "protection": "YES/PSOAS", "complications": "HEMORRHAGE- νοσηλεία"},
+    {"cryoprobes": "3", "types_of_probes": "FORCE", "size_Ice_ball": "", "protection": "", "complications": ""},
+    {"cryoprobes": "4", "types_of_probes": "FORCE", "size_Ice_ball": "5,0 x 3,5 x 5,3", "protection": "YES/COLON, PSOAS", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "FORCE", "size_Ice_ball": "3,5 x 4,1 x 4,3", "protection": "YES/ COLON", "complications": "MILD HEMORRHAGE"},
+    {"cryoprobes": "2", "types_of_probes": "ROD", "size_Ice_ball": "3 x 4,1 x 2,9", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "5,5 x 5,5 x 4,6", "protection": "NO", "complications": "MILD HEMORRHAGE"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "4,2 x 3,9 x 5,4", "protection": "YES/ COLON, PSOAS", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "3,4 x 2,6 x 3,1", "protection": "YES/COLON", "complications": "HEMORRHAGE ΜΕΓΑΛΗ"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "3,8 x 5,3 x 6,5", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "3,2 x 3,7 x 3,6", "protection": "YES/PSOAS", "complications": "MILD HEMORRHAGE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "2,8 x 2,8 x 2,9", "protection": "YES/COLON", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "SPHERE", "size_Ice_ball": "4,6 x 3,6 x 3,6", "protection": "YES/LIVER,COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "ROD", "size_Ice_ball": "4,2 x 3,1 x 3,6", "protection": "YES/LIVER,COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "SPHERE", "size_Ice_ball": "3,6 x 3 x 3,5", "protection": "YES/SPLEEN,COLON", "complications": "NONE"},
+    {"cryoprobes": "4", "types_of_probes": "ROD", "size_Ice_ball": "4,1 x 4 x 5,2", "protection": "YES/COLON", "complications": "SUBCUTANEUS HEMATOMA / MILD HEMORRHAGE"},
+    {"cryoprobes": "3", "types_of_probes": "SPHERE", "size_Ice_ball": "2,7 x 2,9 x 2,6", "protection": "YES/ COLON", "complications": "NONE"},
+    {"cryoprobes": "3", "types_of_probes": "SPHERE", "size_Ice_ball": "4,7 x 3,6 x 3,5", "protection": "YES/ COLON", "complications": "NONE"},
+    {"cryoprobes": "2", "types_of_probes": "SPHERE", "size_Ice_ball": "2,3 x 33 x 2,5", "protection": "YES/ PSOAS", "complications": "NONE"}
 ]
 
 df_cryo = pd.DataFrame(cryo_data)
 
 # -------------------------
-# Merge the two tables by index (assuming they are aligned row-by-row)
+# Merge the two tables by index (assuming they align row-by-row)
 # -------------------------
 df_main.index.name = "index"
 df_cryo.index.name = "index"
 df_merged = pd.merge(df_main, df_cryo, left_index=True, right_index=True)
 
 # -------------------------
-# Helper function to parse "size_mass" into a numeric array
-# -------------------------
-def parse_size(s):
-    try:
-        # Replace comma with dot and split on "x"
-        parts = s.replace(',', '.').split('x')
-        return [float(part.strip()) for part in parts]
-    except:
-        return None
-
-df_merged["size_parsed"] = df_merged["size_mass"].apply(parse_size)
-
-# -------------------------
 # Streamlit App Interface
 # -------------------------
 st.title("Renal Cryoablation Treatment Planner")
 st.markdown("""
-This application matches your tumor dimensions to our reference data and provides a recommended cryoablation plan.
-Please enter your tumor dimensions below.
+This application matches your tumor characteristics to our reference data and provides a recommended cryoablation plan.
+Enter your tumor parameters in the sidebar.
 """)
 
-# Sidebar input for tumor dimensions
-st.sidebar.header("Enter Tumor Dimensions (cm)")
-inp_length = st.sidebar.number_input("Tumor Length", min_value=0.5, max_value=10.0, value=3.7)
-inp_width  = st.sidebar.number_input("Tumor Width", min_value=0.5, max_value=10.0, value=3.2)
-inp_height = st.sidebar.number_input("Tumor Height", min_value=0.5, max_value=10.0, value=3.0)
+# Sidebar: User Input Section
+st.sidebar.header("Enter Tumor Parameters")
+inp_location = st.sidebar.text_input("Location / Distance from Hilum", value="middle-lower/ 14")
+inp_size_mass = st.sidebar.text_input("Tumor Size (Mass)", value="4,2 x 3,6 x 4,6")
+inp_renal_score = st.sidebar.text_input("RENAL Score", value="5p")
+inp_biopsy = st.sidebar.text_input("Biopsy Type", value="CLEAR CELL GR 12")
 
-# When the user clicks the button, find the closest matching row
-if st.sidebar.button("Find Recommended Plan"):
-    user_dims = np.array([inp_length, inp_width, inp_height])
-    user_sorted = np.sort(user_dims)
-    user_mean = np.mean(user_dims)
-
-    best_idx = None
-    best_diff = float("inf")
-
-    for idx, row in df_merged.iterrows():
-        parsed = row["size_parsed"]
-        if parsed is None or len(parsed) != 3:
-            continue
-        ref_dims = np.array(parsed)
-        ref_sorted = np.sort(ref_dims)
-        ref_mean = np.mean(ref_dims)
-        # Compute difference: weighted sum of mean difference and absolute differences in sorted dimensions
-        diff = abs(ref_mean - user_mean) * 2 + np.sum(np.abs(ref_sorted - user_sorted))
-        if diff < best_diff:
-            best_diff = diff
-            best_idx = idx
-
-    if best_idx is None:
-        st.error("No matching data found. Please check your inputs or the reference data.")
+if st.sidebar.button("Generate Cryoablation Plan"):
+    # Filter df_main for an exact match (case-insensitive)
+    filtered = df_main[
+        (df_main["location_distance_hilum"].str.strip().str.lower() == inp_location.strip().lower()) &
+        (df_main["size_mass"].str.strip().str.lower() == inp_size_mass.strip().lower()) &
+        (df_main["RENAL_score"].str.strip().str.lower() == inp_renal_score.strip().lower()) &
+        (df_main["BIOPSY"].str.strip().str.lower() == inp_biopsy.strip().lower())
+    ]
+    
+    if filtered.empty:
+        st.error("No matching data found. Please check your inputs.")
     else:
-        match = df_merged.loc[best_idx]
+        # Assume that the first match is the desired row
+        match = filtered.iloc[0]
+        # Get the corresponding cryo data from the merged table (using the same index)
+        merged_row = df_merged.loc[match.name]
+        
         st.header("Recommended Cryoablation Plan")
-        st.write(f"**Location / Distance from Hilum:** {match['location_distance_hilum']}")
-        st.write(f"**Tumor Size (Mass):** {match['size_mass']} cm")
-        st.write(f"**RENAL Score:** {match['RENAL_score']}")
-        st.write(f"**Biopsy Type:** {match['BIOPSY']}")
-        st.write("---")
+        st.subheader("Input Parameters")
+        st.write(f"**Location / Distance from Hilum:** {merged_row['location_distance_hilum']}")
+        st.write(f"**Tumor Size (Mass):** {merged_row['size_mass']} cm")
+        st.write(f"**RENAL Score:** {merged_row['RENAL_score']}")
+        st.write(f"**Biopsy Type:** {merged_row['BIOPSY']}")
+        st.markdown("---")
         st.subheader("Cryoablation Parameters")
-        st.write(f"**Cryoprobes:** {match['cryoprobes']}")
-        st.write(f"**Types of Probes:** {match['types_of_probes']}")
-        st.write(f"**Estimated Ice Ball Size:** {match['size_Ice_ball']} cm")
-        st.write(f"**Protection:** {match['protection']}")
-        st.write(f"**Complications:** {match['complications']}")
-        st.info(f"Matching difference metric: {best_diff:.2f}")
-
+        st.write(f"**Cryoprobes:** {merged_row['cryoprobes']}")
+        st.write(f"**Types of Probes:** {merged_row['types_of_probes']}")
+        st.write(f"**Estimated Ice Ball Size:** {merged_row['size_Ice_ball']} cm")
+        st.write(f"**Protection:** {merged_row['protection']}")
+        st.write(f"**Complications:** {merged_row['complications']}")
+        
 st.markdown("---")
 st.write("Created by Michailidis A. for free use (demo).")
